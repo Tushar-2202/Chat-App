@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import CustomLoader from '../../components/View/CustomLoader'
 import CustomModal, { ModalType } from '../../components/View/CustomModal'
 import { useIsFocused } from '@react-navigation/native';
+import { formatDate } from '../../utils/Constant'
 
 interface NotebookType {
   userId: string,

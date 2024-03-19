@@ -1,7 +1,7 @@
-import { View, Text, TextInput } from 'react-native'
+import { Text, TextInput } from 'react-native'
 import React from 'react'
 import styles from './style'
-import { Colors, String } from '../../../utils'
+import { Colors } from '../../../utils'
 
 interface InputProps {
   placeholder: string,
@@ -27,7 +27,7 @@ const InputText = (props: InputProps) => {
   return (
     <>
       <TextInput
-        style={[styles.input,{borderColor: error ? Colors.DARK_TOMATO : Colors.BORDER}]}
+        style={[styles.input, { borderColor: error ? Colors.DARK_TOMATO : Colors.BORDER }]}
         placeholder={placeholder}
         placeholderTextColor={Colors.PLACEHOLDER}
         keyboardType={keyboardType}

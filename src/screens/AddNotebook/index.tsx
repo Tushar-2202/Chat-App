@@ -97,7 +97,7 @@ const AddNotebook = ({ navigation, route }: AddNotebookProps) => {
           title: title.trim(),
           description: description.trim(),
           color: selectedColor,
-          date: formatDate(new Date()),
+          date: getFullDate(new Date()),
         };
         await database().ref(`/notes/${route.params?.notebookId}`).update(note);
         Toast.show({
