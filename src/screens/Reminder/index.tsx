@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Switch, FlatList, TouchableOpacity, Pressable } from 'react-native';
 import database from '@react-native-firebase/database';
 import notifee from '@notifee/react-native';
-import { formatDate, formatTime } from '../../utils/Constant';
+import { formatDate } from '../../utils/Constant';
 import styles from './style';
 import CustomLoader from '../../components/View/CustomLoader';
 import { Colors, String, triggerNotification } from '../../utils';
@@ -136,15 +136,7 @@ const Reminder = ({ navigation }: ReminderProps) => {
     );
   };
 
-  useEffect(() => {
-    fetchReminder();
-  }, []);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: selectedReminderId.length > 0 ? headerRight : undefined,
-    });
-  }, [selectedReminderId]);
 
   const convertToAmPm = (date: Date) => {
     const hours = date.getHours();
@@ -161,6 +153,16 @@ const Reminder = ({ navigation }: ReminderProps) => {
       />
     </View>
   );
+
+  useEffect(() => {
+    fetchReminder();
+  }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: selectedReminderId.length > 0 ? headerRight : undefined,
+    });
+  }, [selectedReminderId]);
 
   return (
     <Pressable style={styles.container}

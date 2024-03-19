@@ -23,8 +23,7 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.semiBold
     },
     contentContainer: {
-        flex: 1,
-        backgroundColor:Colors.SECONDARY,
+        backgroundColor: Colors.SECONDARY,
         paddingHorizontal: width * 0.04,
     },
     drawerItem: {
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: height * 0.016,
-        paddingHorizontal: width * 0.08,
+        paddingHorizontal: width * 0.07,
     },
     label: {
         fontSize: 13.5,
