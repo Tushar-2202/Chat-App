@@ -1,0 +1,20 @@
+export const Fonts = {
+    regular: 'Montserrat-Regular',
+    bold: 'Montserrat-Bold',
+    semiBold: 'Montserrat-SemiBold',
+    medium: 'Montserrat-Medium',
+    light: 'Montserrat-Light',
+    thin: 'Montserrat-Thin',
+    extraBold: 'Montserrat-ExtraBold',
+    black: 'Montserrat-Black',
+    italic: 'Montserrat-Italic',
+    extraLight: 'Montserrat-ExtraLight',
+    semiBoldItalic: 'Montserrat-SemiBoldItalic',
+    boldItalic: 'Montserrat-BoldItalic',
+    extraBoldItalic: 'Montserrat-ExtraBoldItalic',
+    blackItalic: 'Montserrat-BlackItalic',
+    extraLightItalic: 'Montserrat-ExtraLightItalic',
+    lightItalic: 'Montserrat-LightItalic',
+    mediumItalic: 'Montserrat-MediumItalic',
+    thinItalic: 'Montserrat-ThinItalic'
+} as const;
