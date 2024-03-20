@@ -6,7 +6,7 @@ import { Colors, String } from '../../utils';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import database from '@react-native-firebase/database';
-import { formatDate, getFullDate } from '../../utils/Constant';
+import { getFullDate } from '../../utils/Constant';
 import Toast from 'react-native-toast-message';
 import { AuthenticatedNavigatorType } from '../../navigation/Authenticated';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -74,7 +74,6 @@ const AddNotebook = ({ navigation, route }: AddNotebookProps) => {
         Toast.show({
           type: 'success',
           text1: String.noteAdded,
-          position: 'bottom',
         });
       }
     } catch (error) {
@@ -103,7 +102,6 @@ const AddNotebook = ({ navigation, route }: AddNotebookProps) => {
         Toast.show({
           type: 'success',
           text1: String.noteUpdated,
-          position: 'bottom',
         });
         setTitle('');
         setDescription('')

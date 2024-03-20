@@ -136,6 +136,13 @@ const Login = ({ navigation }: LoginProps) => {
         }
     }
 
+    const facebookLogin = () => {
+        Toast.show({
+            type: 'success',
+            text1: String.loginWithFacebook
+        })
+    }
+
     return (
         <ScrollView>
             <CustomLoader
@@ -207,7 +214,7 @@ const Login = ({ navigation }: LoginProps) => {
                     />
                     <CustomButton
                         title={String.loginWithFacebook}
-                        onPress={() => { }}
+                        onPress={facebookLogin}
                         backgroundColor={Colors.BLUE}
                         borderColor={Colors.DARK_BLUE}
                     />
