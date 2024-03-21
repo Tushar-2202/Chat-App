@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     amPm: {
         fontSize: width * 0.04,
         marginBottom: 5,
+        fontFamily: Fonts.medium
     }
 })
 

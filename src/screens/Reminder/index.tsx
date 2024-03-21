@@ -136,8 +136,6 @@ const Reminder = ({ navigation }: ReminderProps) => {
     );
   };
 
-
-
   const convertToAmPm = (date: Date) => {
     const hours = date.getHours();
     return hours >= 12 ? String.pm : String.am;
