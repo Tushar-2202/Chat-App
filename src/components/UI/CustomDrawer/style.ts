@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: height * 0.016,
-        paddingHorizontal: width * 0.07,
+        paddingHorizontal: width * 0.06,
     },
     label: {
         fontSize: 13.5,
@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.TEXT_LITE,
         marginTop: 15,
         marginBottom: 15,
+    },
+    firstDrawerItem: {
+        marginTop: -height * 0.02,
     }
 })
 

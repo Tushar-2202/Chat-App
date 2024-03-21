@@ -2,8 +2,8 @@ import { View, Text, StatusBar } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Routes } from './Routes';
-import Signup from '../screens/Signup';
-import Login from '../screens/Login';
+import Signup from '../screens/UnAuthenticated/Signup';
+import Login from '../screens/UnAuthenticated/Login';
 import { Colors } from '../utils';
 
 export type UnAuthenticatedNavigatorType = {

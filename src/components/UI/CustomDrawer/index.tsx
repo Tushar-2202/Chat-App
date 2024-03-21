@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DrawerContentScrollView, DrawerContentComponentProps } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions, useNavigation } from '@react-navigation/native';
-import { Routes } from '../../../navigation/Routes';
+import { Routes } from '../../../Routes/Routes';
 import styles from './style';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors, String } from '../../../utils';
@@ -129,7 +129,8 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
             <DrawerContentScrollView {...props}
                 style={styles.contentContainer}
             >
-                <DrawerItem label={String.notes} value={noOfNotes} onPress={() => navigation.navigate(Routes.Notebook)} />
+                <View style={styles.firstDrawerItem} />
+                <DrawerItem label={String.notes} value={noOfNotes} onPress={() => navigation.navigate(Routes.Notebook)}/>
                 <DrawerItem label={String.reminders} value={noOfReminders} onPress={() => navigation.navigate(Routes.Reminder)} />
                 <DrawerItem label={String.deleted} value="0" onPress={handleClick} />
                 <DrawerItem label={String.archives} value="24" onPress={handleClick} />

@@ -21,7 +21,8 @@ const InputText = (props: InputProps) => {
     onChangeText,
     onBlur,
     value,
-    error
+    error,
+    secureTextEntry = false
   } = props
 
   return (
@@ -32,6 +33,7 @@ const InputText = (props: InputProps) => {
         placeholderTextColor={Colors.PLACEHOLDER}
         keyboardType={keyboardType}
         onChangeText={onChangeText}
+        secureTextEntry={secureTextEntry}
         onBlur={onBlur}
         value={value}
       />

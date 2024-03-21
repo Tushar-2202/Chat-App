@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { Colors, Fonts } from "../../utils";
-import { width, height } from "../../utils/Constant";
+import { Colors, Fonts } from "../../../utils";
+import { width, height } from "../../../utils/Constant";
 
 const styles = StyleSheet.create({
     container: {
@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
     noteTitle: {
         fontSize: width * 0.039,
         fontFamily: Fonts.semiBold,
-        color: Colors.TEXT_GRAY,
+        color: Colors.TEXT_LITE,
+        marginVertical: 10
     },
     noteDescription: {
         fontSize: width * 0.044,

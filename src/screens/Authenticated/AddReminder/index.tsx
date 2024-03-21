@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, TextInput, Text, ScrollView } from 'react-native';
-import { Colors, String, triggerNotification } from '../../utils';
+import { Colors, String, triggerNotification } from '../../../utils';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DatePicker from 'react-native-date-picker';
 import { useSelector } from 'react-redux';
-import CustomLoader from '../../components/View/CustomLoader';
-import NoteBottomTab from '../../components/UI/NoteBottomTab';
+import CustomLoader from '../../../components/View/CustomLoader';
+import NoteBottomTab from '../../../components/UI/NoteBottomTab';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthenticatedNavigatorType } from '../../navigation/Authenticated';
-import { formatDate, formatTime } from '../../utils/Constant';
+import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated';
+import { formatDate, formatTime } from '../../../utils/Constant';
 import database from '@react-native-firebase/database';
 import styles from './style';
+import notifee from '@notifee/react-native';
 import Toast from 'react-native-toast-message';
 
 export interface ReminderType {
   userId: string // user id
-  title: string
   description: string
   datetime: string,
   reminderOn?: boolean,
@@ -27,7 +27,6 @@ export interface ReminderType {
 type AddReminderProps = NativeStackScreenProps<AuthenticatedNavigatorType, 'AddReminder'>;
 
 const AddReminder = ({ navigation, route }: AddReminderProps) => {
-  const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [datetime, setDateTime] = useState<Date>(new Date());
   const [dateopen, setDateOpen] = useState<boolean>(false);
@@ -41,16 +40,15 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: title === '' ? undefined : headerRight,
+      headerRight: description === '' ? undefined : headerRight,
     });
-  }, [title, description, datetime]);
+  }, [description, datetime]);
 
   useEffect(() => {
     if (route.params?.reminderId) {
       setLoader(true);
       database().ref(`/reminders/${route.params?.reminderId}`).once('value', (snapshot) => {
         const reminder = snapshot.val();
-        setTitle(reminder.title);
         setDescription(reminder.description);
         setDateTime(new Date(reminder.datetime));
         setDateselecteButton(reminder.dateselecteButton);
@@ -61,6 +59,7 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
   }, []);
 
   const headerRight = () => (
+
     <View style={styles.iconContainer}>
       <MaterialIcons name="close" size={30} color={Colors.WHITE} style={styles.headerIcons}
         onPress={() => navigation.goBack()}
@@ -78,14 +77,13 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
   const addReminder = async () => {
     setLoader(true);
     try {
-      if (title.trim() === '') {
+      if (description.trim() === '') {
         setLoader(false);
         return;
       }
-      
+
       const reminder: ReminderType = {
         userId: userInfo.uuid,
-        title: title.trim(),
         description: description.trim(),
         datetime: datetime.toISOString(),
         dateselecteButton,
@@ -111,13 +109,12 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
   const updateReminder = async () => {
     setLoader(true);
     try {
-      if (title.trim() === '') {
+      if (description.trim() === '') {
         setLoader(false);
         return;
       }
       const reminder: ReminderType = {
         userId: userInfo.uuid,
-        title: title.trim(),
         description: description.trim(),
         datetime: datetime.toISOString(),
         dateselecteButton,
@@ -126,6 +123,7 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
       };
       await database().ref(`/reminders/${route.params?.reminderId}`).update(reminder);
 
+      await notifee.cancelNotification(route.params?.reminderId || '');
       triggerNotification(reminder, route.params?.reminderId || '', userInfo?.uuid);
 
       Toast.show({
@@ -134,7 +132,6 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
       });
       setLoader(false);
       navigation.goBack();
-
     } catch (error) {
       setLoader(false);
       console.log('Error', error);
@@ -153,57 +150,58 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
   );
 
   const handledChooseDate = (item: string) => {
+    const selectedDate = new Date(datetime);
+    const newDate = new Date();
     switch (item) {
       case String.choose:
         setDateOpen(true);
-        setDateselecteButton(item);
         break;
       case String.today:
-        setDateTime(new Date());
-        setDateselecteButton(item);
+        newDate.setDate(newDate.getDate());
         break;
       case String.tomorrow:
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        setDateTime(tomorrow);
-        setDateselecteButton(item);
+        newDate.setDate(newDate.getDate() + 1);
         break;
       case String.everyday:
-        setDateTime(new Date());
-        setDateselecteButton(item);
+        newDate.setDate(newDate.getDate());
         break;
       default:
         break;
     }
+    setDateselecteButton(item);
+    newDate.setHours(selectedDate.getHours());
+    newDate.setMinutes(selectedDate.getMinutes());
+    setDateTime(newDate);
   }
 
   const handledChooseTime = (item: string) => {
+    const selectedDate = new Date(datetime);
+    const newDate = new Date();
     switch (item) {
       case String.choose:
         setTimeOpen(true);
         setTimeSelectedButton(item);
         break;
       case String.tenMin:
-        const tenMin = new Date();
-        tenMin.setMinutes(tenMin.getMinutes() + 10);
-        setDateTime(tenMin);
+        newDate.setHours(newDate.getHours());
+        newDate.setMinutes(newDate.getMinutes() + 10);
         setTimeSelectedButton(item);
         break;
       case String.thirtyMin:
-        const thirtyMin = new Date();
-        thirtyMin.setMinutes(thirtyMin.getMinutes() + 30);
-        setDateTime(thirtyMin);
+        newDate.setHours(newDate.getHours());
+        newDate.setMinutes(newDate.getMinutes() + 30);
         setTimeSelectedButton(item);
         break;
       case String.oneHour:
-        const oneHour = new Date();
-        oneHour.setHours(oneHour.getHours() + 1);
-        setDateTime(oneHour);
+        newDate.setHours(newDate.getHours() + 1);
+        newDate.setMinutes(newDate.getMinutes());
         setTimeSelectedButton(item);
         break;
       default:
         break;
     }
+    newDate.setDate(selectedDate.getDate());
+    setDateTime(newDate);
   }
 
   return (
@@ -219,10 +217,10 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
             if (dateopen) setDateOpen(false);
             else setTimeOpen(false);
 
-            if (date.getTime() < new Date().getTime()) {
+            if (date < new Date()) {
               Toast.show({
                 type: 'error',
-                text1: String.selectedTimePassed,
+                text1: String.chooseCurrectTimeDate,
               });
               return;
             }
@@ -280,13 +278,7 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
 
         <View style={styles.notePad}>
           <View style={styles.noteContent}>
-            <TextInput
-              style={styles.noteTitle}
-              placeholder={String.addNote}
-              placeholderTextColor={Colors.TEXT_LITE}
-              value={title}
-              onChangeText={(text) => setTitle(text)}
-            />
+            <Text style={styles.noteTitle}>{String.addNote}</Text>
             <TextInput
               style={styles.noteDescription}
               placeholder={String.typeHere}

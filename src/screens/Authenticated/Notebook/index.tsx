@@ -2,16 +2,17 @@ import { BackHandler, FlatList, Pressable, Text, TouchableOpacity, View } from '
 import React, { useEffect, useState } from 'react'
 import styles from './style'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { Colors, String } from '../../utils'
+import { Colors, String } from '../../../utils'
 import Feather from 'react-native-vector-icons/Feather'
+import Octicons from 'react-native-vector-icons/Octicons'
 import database from '@react-native-firebase/database'
-import { Routes } from '../../navigation/Routes'
+import { Routes } from '../../../Routes/Routes'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { AuthenticatedNavigatorType } from '../../navigation/Authenticated'
+import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated'
 import Toast from 'react-native-toast-message'
 import { useSelector } from 'react-redux'
-import CustomLoader from '../../components/View/CustomLoader'
-import CustomModal, { ModalType } from '../../components/View/CustomModal'
+import CustomLoader from '../../../components/View/CustomLoader'
+import CustomModal, { ModalType } from '../../../components/View/CustomModal'
 import { useIsFocused } from '@react-navigation/native';
 
 interface NotebookType {
@@ -65,10 +66,21 @@ const Notebook = ({ navigation }: NotebookProps) => {
     }
   }
 
+  const selecteMultipleNotes = () => {
+    if (selectedNoteIds.length === Data.length) {
+      setSelectedNoteIds([])
+    } else {
+      const ids = Data.map(note => note.id)
+      setSelectedNoteIds(ids)
+    }
+  }
+
   const headerRight = () => (
     <View style={styles.iconContainer}>
       <Feather name="edit-2" size={25} color={Colors.WHITE} />
-      <Feather name="download" size={25} color={Colors.WHITE} />
+      <Octicons name="multi-select" size={25} color={Colors.WHITE}
+        onPress={selecteMultipleNotes}
+      />
       <Feather name="trash-2" size={25} color={Colors.WHITE}
         onPress={() => openModal(String.alert, ModalType.ALERT, String.deleteNoteMessage)}
       />
@@ -137,6 +149,60 @@ const Notebook = ({ navigation }: NotebookProps) => {
     setMessage(message)
   }
 
+  const renderNotes = ({ item }: { item: NotebookType }) => (
+    <TouchableOpacity
+      style={[
+        styles.noteContainer,
+        {
+          backgroundColor: item.color ? item.color : Colors.WHITE,
+          borderWidth: selectedNoteIds.includes(item.id) ? 2 : 0,
+          elevation: selectedNoteIds.includes(item.id) ? 5 : 0
+        }]}
+      activeOpacity={0.7}
+      onPress={() => handleSinglePress(item.id)}
+      onLongPress={() => handledLongPress(item.id)}
+    >
+      <View style={styles.header}>
+        <Text
+          style={[styles.title, {
+            color: item.color === Colors.WHITE ? Colors.NOTE_HEADER : Colors.WHITE
+          }]}
+          numberOfLines={1}
+        >{item.title}</Text>
+        {selectedNoteIds.includes(item.id) ? (
+          <Icon
+            name='checkmark-circle-sharp'
+            size={20}
+            color={item.color === Colors.PRIMARY ? Colors.WHITE : Colors.PRIMARY}
+          />
+        ) : null}
+      </View>
+
+      <View style={styles.content}>
+        <Text
+          style={[styles.contentText, {
+            color: item.color === Colors.WHITE ? Colors.NOTE_TEXT : Colors.WHITE
+          }]}
+          numberOfLines={6}
+          ellipsizeMode='tail'
+        >{item.description}</Text>
+      </View>
+
+      <View style={styles.footer}>
+        <Icon
+          name='time-outline'
+          size={11}
+          color={Colors.BOTTOM_BAR_TEXT}
+        />
+        <Text
+          style={styles.dateText}
+        >
+          {item.date}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  )
+
   useEffect(() => {
     fetchNotes()
   }, [])
@@ -192,59 +258,7 @@ const Notebook = ({ navigation }: NotebookProps) => {
 
       <FlatList
         data={Data}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[
-              styles.noteContainer,
-              {
-                backgroundColor: item.color ? item.color : Colors.WHITE,
-                borderWidth: selectedNoteIds.includes(item.id) ? 2 : 0,
-                elevation: selectedNoteIds.includes(item.id) ? 5 : 0
-              }]}
-            activeOpacity={0.7}
-            onPress={() => handleSinglePress(item.id)}
-            onLongPress={() => handledLongPress(item.id)}
-          >
-            <View style={styles.header}>
-              <Text
-                style={[styles.title, {
-                  color: item.color === Colors.WHITE ? Colors.NOTE_HEADER : Colors.WHITE
-                }]}
-                numberOfLines={1}
-              >{item.title}</Text>
-              {selectedNoteIds.includes(item.id) ? (
-                <Icon
-                  name='checkmark-circle-sharp'
-                  size={20}
-                  color={item.color === Colors.PRIMARY ? Colors.WHITE : Colors.PRIMARY}
-                />
-              ) : null}
-            </View>
-
-            <View style={styles.content}>
-              <Text
-                style={[styles.contentText, {
-                  color: item.color === Colors.WHITE ? Colors.NOTE_TEXT : Colors.WHITE
-                }]}
-                numberOfLines={6}
-                ellipsizeMode='tail'
-              >{item.description}</Text>
-            </View>
-
-            <View style={styles.footer}>
-              <Icon
-                name='time-outline'
-                size={11}
-                color={Colors.BOTTOM_BAR_TEXT}
-              />
-              <Text
-                style={styles.dateText}
-              >
-                {item.date}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
+        renderItem={renderNotes}
         numColumns={2}
         keyExtractor={item => item.id.toString()}
         ListEmptyComponent={() => <EmptyNotes />}

@@ -9,7 +9,7 @@ export const Colors = {
     TEXT_GRAY_LITE: '#808080',
     TEXT_LITE: '#b9b9b9',
     TEXT_GRAY_DARK: '#d6d6d6',
-    PLACEHOLDER: '#e6e6e6',
+    PLACEHOLDER: '#d6d6d6',
     BORDER: '#c6c6c6',
     TOMATO: '#dc6a5c',
     DARK_TOMATO: '#ed4a3e',

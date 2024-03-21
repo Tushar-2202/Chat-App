@@ -1,22 +1,22 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import styles from './style'
-import { Colors, String } from '../../utils'
-import CustomButton from '../../components/UI/CustomButton'
+import { Colors, String } from '../../../utils'
+import CustomButton from '../../../components/UI/CustomButton'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { Routes } from '../../navigation/Routes'
+import { Routes } from '../../../Routes/Routes'
 import { useForm, Controller } from "react-hook-form"
-import { REGEX } from '../../utils/Constant'
-import InputText from '../../components/UI/InputText'
-import { UnAuthenticatedNavigatorType } from '../../navigation/UnAuthenticated'
-import { RootNavigatorType } from '../../navigation/Navigate'
+import { REGEX } from '../../../utils/Constant'
+import InputText from '../../../components/UI/InputText'
+import { UnAuthenticatedNavigatorType } from '../../../Routes/UnAuthenticated'
+import { RootNavigatorType } from '../../../Routes/Navigate'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
-import { UserInfo, addUser } from '../../redux-toolkit/userSlice'
+import { UserInfo, addUser } from '../../../redux-toolkit/userSlice'
 import { useDispatch } from 'react-redux'
 import { CommonActions } from '@react-navigation/native'
 import Toast from 'react-native-toast-message'
-import CustomLoader from '../../components/View/CustomLoader'
+import CustomLoader from '../../../components/View/CustomLoader'
 
 interface SignupProps {
   navigation: NativeStackNavigationProp<UnAuthenticatedNavigatorType & RootNavigatorType>
@@ -99,21 +99,6 @@ const Signup = ({ navigation }: SignupProps) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <InputText
-                  placeholder={String.userName}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                  error={errors[String.userName]?.message}
-                />
-              )}
-              name={String.userName}
-              rules={{ required: String.userNameRequired }}
-            />
-
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <InputText
                   placeholder={String.emailIDPlaceholder}
                   keyboardType='email-address'
                   onChangeText={onChange}
@@ -133,6 +118,21 @@ const Signup = ({ navigation }: SignupProps) => {
               control={control}
               render={({ field: { onChange, onBlur, value } }) => (
                 <InputText
+                  placeholder={String.userName}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  error={errors[String.userName]?.message}
+                />
+              )}
+              name={String.userName}
+              rules={{ required: String.userNameRequired }}
+            />
+
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <InputText
                   placeholder={String.password}
                   secureTextEntry
                   onChangeText={onChange}
@@ -144,7 +144,8 @@ const Signup = ({ navigation }: SignupProps) => {
               name={String.password}
               rules={{
                 required: { value: true, message: String.passwordRequired },
-                minLength: { value: 4, message: String.passwordMinLength }
+                minLength: { value: 4, message: String.passwordMinLength },
+                pattern: { value: REGEX.PASSWORD, message: String.passwordmustBeStrong }
               }}
             />
 
@@ -163,6 +164,7 @@ const Signup = ({ navigation }: SignupProps) => {
               name={String.confiremPassword}
               rules={{
                 required: { value: true, message: String.confirmPasswordRequired },
+                pattern: { value: REGEX.PASSWORD, message: String.passwordmustBeStrong },
                 validate: value => value === watch(String.password) || String.confirmPasswordMatch
               }}
             />

@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Switch, FlatList, TouchableOpacity, Pressable } from 'react-native';
 import database from '@react-native-firebase/database';
 import notifee from '@notifee/react-native';
-import { formatDate } from '../../utils/Constant';
+import { formatDate } from '../../../utils/Constant';
 import styles from './style';
-import CustomLoader from '../../components/View/CustomLoader';
-import { Colors, String, triggerNotification } from '../../utils';
+import CustomLoader from '../../../components/View/CustomLoader';
+import { Colors, String, triggerNotification } from '../../../utils';
 import { useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 import Feather from 'react-native-vector-icons/Feather';
+import Octicons from 'react-native-vector-icons/Octicons';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthenticatedNavigatorType } from '../../navigation/Authenticated';
-import { Routes } from '../../navigation/Routes';
-import CustomModal, { ModalType } from '../../components/View/CustomModal';
+import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated';
+import { Routes } from '../../../Routes/Routes';
+import CustomModal, { ModalType } from '../../../components/View/CustomModal';
 
 export interface ReminderTypes {
   id: string; // firebase id
@@ -141,8 +142,20 @@ const Reminder = ({ navigation }: ReminderProps) => {
     return hours >= 12 ? String.pm : String.am;
   }
 
+  const selecteMultipleReminders = () => {
+    if (selectedReminderId.length === reminderData.length) {
+      setSelectedReminderId([]);
+    } else {
+      const allReminderId = reminderData.map((reminder) => reminder.id);
+      setSelectedReminderId(allReminderId);
+    }
+  }
+
   const headerRight = () => (
     <View style={styles.iconContainer}>
+      <Octicons name="multi-select" size={25} color={Colors.WHITE}
+        onPress={selecteMultipleReminders}
+      />
       <Feather
         name="trash-2"
         size={25}
@@ -150,6 +163,47 @@ const Reminder = ({ navigation }: ReminderProps) => {
         onPress={() => openModal(ModalType.ALERT, String.deleteReminderMessage)}
       />
     </View>
+  );
+
+  const renderReminders = ({ item }: { item: ReminderTypes }) => (
+    <TouchableOpacity
+      style={[
+        styles.reminderBox,
+        {
+          borderWidth: selectedReminderId.includes(item.id) ? 2 : 0,
+        },
+      ]}
+      activeOpacity={0.7}
+      onPress={() => handleSinglePress(item.id)}
+      onLongPress={() => handledLongPress(item.id)}
+    >
+      <View style={styles.reminderContent}>
+        <Text style={styles.dateStatus}>
+          {
+            item.dateselecteButton === String.choose ? formatDate(item.datetime) : item.dateselecteButton
+          }
+        </Text>
+        <View style={styles.timeContainer}>
+          <Text style={styles.time}>
+            {item.datetime.toTimeString().slice(0, 5)}
+          </Text>
+          <Text style={styles.amPm}>
+            {convertToAmPm(item.datetime)}
+          </Text>
+        </View>
+
+        <Text style={styles.description} numberOfLines={1}>
+          {item.description}
+        </Text>
+      </View>
+      <Switch
+        style={styles.switch}
+        trackColor={{ false: Colors.BOTTOM_BAR_TEXT, true: Colors.DARK_YELLOW }}
+        thumbColor={item.reminderOn ? Colors.LITE_YELLOW : Colors.TEXT_GRAY_DARK}
+        value={item.reminderOn}
+        onValueChange={(value) => handledReminderOn(value, item.id)}
+      />
+    </TouchableOpacity>
   );
 
   useEffect(() => {
@@ -188,46 +242,7 @@ const Reminder = ({ navigation }: ReminderProps) => {
         data={reminderData}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[
-              styles.reminderBox,
-              {
-                borderWidth: selectedReminderId.includes(item.id) ? 2 : 0,
-              },
-            ]}
-            activeOpacity={0.7}
-            onPress={() => handleSinglePress(item.id)}
-            onLongPress={() => handledLongPress(item.id)}
-          >
-            <View style={styles.reminderContent}>
-              <Text style={styles.dateStatus}>
-                {
-                  item.dateselecteButton === String.choose ? formatDate(item.datetime) : item.dateselecteButton
-                }
-              </Text>
-              <View style={styles.timeContainer}>
-                <Text style={styles.time}>
-                  {item.datetime.toTimeString().slice(0, 5)}
-                </Text>
-                <Text style={styles.amPm}>
-                  {convertToAmPm(item.datetime)}
-                </Text>
-              </View>
-
-              <Text style={styles.description} numberOfLines={1}>
-                {item.description}
-              </Text>
-            </View>
-            <Switch
-              style={styles.switch}
-              trackColor={{ false: Colors.BOTTOM_BAR_TEXT, true: Colors.DARK_YELLOW }}
-              thumbColor={item.reminderOn ? Colors.LITE_YELLOW : Colors.TEXT_GRAY_DARK}
-              value={item.reminderOn}
-              onValueChange={(value) => handledReminderOn(value, item.id)}
-            />
-          </TouchableOpacity>
-        )}
+        renderItem={renderReminders}
         ListEmptyComponent={() => <EmptyReminder />}
       />
     </Pressable>

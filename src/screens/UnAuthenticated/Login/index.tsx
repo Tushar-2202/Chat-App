@@ -1,23 +1,23 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import styles from './style'
-import { REGEX, toUpperCase } from '../../utils/Constant'
-import { Colors, String } from '../../utils'
-import CustomButton from '../../components/UI/CustomButton'
+import { REGEX, toUpperCase } from '../../../utils/Constant'
+import { Colors, String } from '../../../utils'
+import CustomButton from '../../../components/UI/CustomButton'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { UnAuthenticatedNavigatorType } from '../../navigation/UnAuthenticated'
-import { Routes } from '../../navigation/Routes'
+import { UnAuthenticatedNavigatorType } from '../../../Routes/UnAuthenticated'
+import { Routes } from '../../../Routes/Routes'
 import { Controller, useForm } from 'react-hook-form'
-import InputText from '../../components/UI/InputText'
+import InputText from '../../../components/UI/InputText'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import database from '@react-native-firebase/database';
 import Toast from 'react-native-toast-message'
 import auth from '@react-native-firebase/auth';
-import { RootNavigatorType } from '../../navigation/Navigate'
-import { addUser, UserInfo } from '../../redux-toolkit/userSlice'
+import { RootNavigatorType } from '../../../Routes/Navigate'
+import { addUser, UserInfo } from '../../../redux-toolkit/userSlice'
 import { useDispatch } from 'react-redux'
 import { CommonActions } from '@react-navigation/native'
-import CustomLoader from '../../components/View/CustomLoader'
+import CustomLoader from '../../../components/View/CustomLoader'
 
 interface LoginProps {
     navigation: NativeStackNavigationProp<UnAuthenticatedNavigatorType & RootNavigatorType>
@@ -191,7 +191,7 @@ const Login = ({ navigation }: LoginProps) => {
                             name={String.password}
                             rules={{
                                 required: { value: true, message: String.passwordRequired },
-                                minLength: { value: 4, message: String.passwordMinLength }
+                                minLength: { value: 4, message: String.passwordMinLength },
                             }}
                         />
                     </View>

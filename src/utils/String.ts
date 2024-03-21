@@ -50,6 +50,7 @@ export const String = {
     ok: 'OK',
     cancle: 'Cancle',
     alert: 'Alert',
+    passwordmustBeStrong: 'Password must be strong',
     
     //success Messages
     signUpSuccess: 'Sign up successfully',
@@ -86,7 +87,7 @@ export const String = {
     reminderDeleted: 'Reminder deleted successfully',
     reminderUpdated: 'Reminder updated successfully',
     errorFetchedReminders: 'Error in fetching reminders',
-    selectedTimePassed: 'Selected time has already passed',
+    chooseCurrectTimeDate: 'Please choose a future time and date',
 
     //provider
     google: 'Google',

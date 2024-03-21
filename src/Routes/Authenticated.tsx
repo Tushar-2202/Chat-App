@@ -2,8 +2,8 @@ import React from 'react'
 import { Routes } from './Routes';
 import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
 import Dashboard from './Dashboard';
-import AddNotebook from '../screens/AddNotebook';
-import AddReminder from '../screens/AddReminder';
+import AddNotebook from '../screens/Authenticated/AddNotebook';
+import AddReminder from '../screens/Authenticated/AddReminder';
 import { Colors, Fonts, String } from '../utils';
 import Icon from 'react-native-vector-icons/AntDesign';
 

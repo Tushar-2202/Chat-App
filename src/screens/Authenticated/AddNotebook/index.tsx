@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, TextInput } from 'react-native';
 import styles from './style';
-import NoteBottomTab from '../../components/UI/NoteBottomTab';
-import { Colors, String } from '../../utils';
+import NoteBottomTab from '../../../components/UI/NoteBottomTab';
+import { Colors, String } from '../../../utils';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import database from '@react-native-firebase/database';
-import { getFullDate } from '../../utils/Constant';
+import { getFullDate } from '../../../utils/Constant';
 import Toast from 'react-native-toast-message';
-import { AuthenticatedNavigatorType } from '../../navigation/Authenticated';
+import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
-import CustomLoader from '../../components/View/CustomLoader';
+import CustomLoader from '../../../components/View/CustomLoader';
 
 interface NoteType {
   userId: string;

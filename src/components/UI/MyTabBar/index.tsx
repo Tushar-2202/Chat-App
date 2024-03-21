@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors, String } from '../../../utils';
-import { Routes } from '../../../navigation/Routes';
+import { Routes } from '../../../Routes/Routes';
 import styles from './style';
 
 const MyTabBar = ({ state, navigation }:any) => {

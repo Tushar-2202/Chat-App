@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { Colors, Fonts } from "../../utils";
-import { height } from "../../utils/Constant";
+import { Colors, Fonts } from "../../../utils";
+import { height } from "../../../utils/Constant";
 
 const styles = StyleSheet.create({
     container: {
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
         // flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-        gap: 2,
+        alignItems: 'center',
+        gap: 3,
     },
     title: {
         fontFamily: Fonts.semiBold,
