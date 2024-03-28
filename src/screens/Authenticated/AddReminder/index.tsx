@@ -15,7 +15,6 @@ import notifee from '@notifee/react-native';
 import moment from 'moment';
 import Toast from 'react-native-toast-message';
 
-
 export interface ReminderType {
   userId: string // user id
   description: string
