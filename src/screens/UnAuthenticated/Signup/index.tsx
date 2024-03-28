@@ -1,12 +1,11 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import styles from './style'
-import { Colors, String } from '../../../utils'
+import { Colors, String, REGEX } from '../../../utils'
 import CustomButton from '../../../components/UI/CustomButton'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Routes } from '../../../Routes/Routes'
 import { useForm, Controller } from "react-hook-form"
-import { REGEX } from '../../../utils/Constant'
 import InputText from '../../../components/UI/InputText'
 import { UnAuthenticatedNavigatorType } from '../../../Routes/UnAuthenticated'
 import { RootNavigatorType } from '../../../Routes/Navigate'
@@ -61,7 +60,6 @@ const Signup = ({ navigation }: SignupProps) => {
             routes: [{ name: Routes.Authentication }],
           }),
         );
-
       });
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {

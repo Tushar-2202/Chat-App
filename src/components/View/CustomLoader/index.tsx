@@ -1,4 +1,4 @@
-import { View, Text, Modal, ActivityIndicator } from 'react-native'
+import { View, Modal, ActivityIndicator } from 'react-native'
 import React from 'react'
 import styles from './style'
 import { Colors } from '../../../utils'

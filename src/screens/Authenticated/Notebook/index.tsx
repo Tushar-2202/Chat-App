@@ -229,6 +229,8 @@ const Notebook = ({ navigation }: NotebookProps) => {
     return () => backHandler.remove();
   }, [isFocusedScreen]);
 
+  
+
   return (
     <Pressable style={styles.container}
       onPress={() => setSelectedNoteIds([])}

@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
-import { height, width } from "../../../utils/Constant";
-import { Colors } from "../../../utils";
+import { Colors, height, width } from "../../../utils";
 
 const styles = StyleSheet.create({
     bottomTab: {

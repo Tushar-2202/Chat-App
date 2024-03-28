@@ -1,13 +1,12 @@
 import { StyleSheet } from "react-native";
-import { Colors, Fonts } from "../../../utils";
-import { width, height } from "../../../utils/Constant";
+import { Colors, Fonts, width, height } from "../../../utils";
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
     notePad: {
-        height: height * 0.6,
+        flex: 1,
         paddingHorizontal: width * 0.08,
         paddingVertical: 15,
         backgroundColor: Colors.WHITE

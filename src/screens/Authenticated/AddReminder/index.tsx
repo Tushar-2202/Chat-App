@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, TextInput, Text, ScrollView } from 'react-native';
+import { View, TouchableOpacity, TextInput, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Colors, String, triggerNotification } from '../../../utils';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -9,11 +9,12 @@ import CustomLoader from '../../../components/View/CustomLoader';
 import NoteBottomTab from '../../../components/UI/NoteBottomTab';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated';
-import { formatDate, formatTime } from '../../../utils/Constant';
 import database from '@react-native-firebase/database';
 import styles from './style';
 import notifee from '@notifee/react-native';
+import moment from 'moment';
 import Toast from 'react-native-toast-message';
+
 
 export interface ReminderType {
   userId: string // user id
@@ -59,7 +60,6 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
   }, []);
 
   const headerRight = () => (
-
     <View style={styles.iconContainer}>
       <MaterialIcons name="close" size={30} color={Colors.WHITE} style={styles.headerIcons}
         onPress={() => navigation.goBack()}
@@ -205,92 +205,86 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
   }
 
   return (
-    <>
-      <ScrollView style={styles.container}>
-        <CustomLoader loader={loader} setLoader={setLoader} />
-        <DatePicker
-          modal
-          mode={dateopen ? 'date' : 'time'}
-          open={dateopen || timeopen}
-          date={datetime}
-          onConfirm={(date) => {
-            if (dateopen) setDateOpen(false);
-            else setTimeOpen(false);
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={-100}
+    >
+      <CustomLoader loader={loader} setLoader={setLoader} />
+      <DatePicker
+        modal
+        mode={dateopen ? 'date' : 'time'}
+        open={dateopen || timeopen}
+        date={datetime}
+        minimumDate={new Date()}
+        onConfirm={(date) => {
+          if (dateopen) setDateOpen(false);
+          else setTimeOpen(false);
+          setDateTime(date);
+        }}
+        onCancel={() => {
+          if (dateopen) setDateOpen(false);
+          else setTimeOpen(false);
+        }}
+      />
 
-            if (date < new Date()) {
-              Toast.show({
-                type: 'error',
-                text1: String.chooseCurrectTimeDate,
-              });
-              return;
-            }
-            setDateTime(date);
-          }}
-          onCancel={() => {
-            if (dateopen) setDateOpen(false);
-            else setTimeOpen(false);
-          }}
-        />
+      <View style={styles.reminderTimeContainer}>
+        <View style={styles.reminderDate}>
+          <Text style={styles.on}>{String.on}</Text>
+          <Text style={styles.date}>{moment(datetime).format('Do MMMM')}</Text>
 
-        <View style={styles.reminderTimeContainer}>
-          <View style={styles.reminderDate}>
-            <Text style={styles.on}>{String.on}</Text>
-            <Text style={styles.date}>{formatDate(datetime)}</Text>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.reminderChooseButtons}>
-              {dateButton.map((item, index) => (
-                <TouchableOpacity key={index} style={[styles.chooseButton,
-                {
-                  backgroundColor: item === dateselecteButton ? Colors.PRIMARY : Colors.WHITE,
-                }
-                ]}
-                  activeOpacity={0.7}
-                  onPress={() => handledChooseDate(item)}
-                >
-                  <Text style={[styles.chooseText, {
-                    color: item === dateselecteButton ? Colors.WHITE : Colors.TEXT_LITE,
-                  }]}>{item}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-
-          <View style={styles.reminderDate}>
-            <Text style={styles.on}>{String.time}</Text>
-            <Text style={styles.date}>{formatTime(datetime)}</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.reminderChooseButtons}>
-              {timeButton.map((item, index) => (
-                <TouchableOpacity key={index} style={[styles.chooseButton,
-                {
-                  backgroundColor: item === timeselectedButton ? Colors.PRIMARY : Colors.WHITE,
-                }
-                ]} activeOpacity={0.7}
-                  onPress={() => handledChooseTime(item)}
-                >
-                  <Text style={[styles.chooseText
-                    , { color: item === timeselectedButton ? Colors.WHITE : Colors.TEXT_LITE }
-                  ]}>{item}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.reminderChooseButtons}>
+            {dateButton.map((item, index) => (
+              <TouchableOpacity key={index} style={[styles.chooseButton,
+              {
+                backgroundColor: item === dateselecteButton ? Colors.PRIMARY : Colors.WHITE,
+              }
+              ]}
+                activeOpacity={0.7}
+                onPress={() => handledChooseDate(item)}
+              >
+                <Text style={[styles.chooseText, {
+                  color: item === dateselecteButton ? Colors.WHITE : Colors.TEXT_LITE,
+                }]}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
 
-        <View style={styles.notePad}>
-          <View style={styles.noteContent}>
-            <Text style={styles.noteTitle}>{String.addNote}</Text>
-            <TextInput
-              style={styles.noteDescription}
-              placeholder={String.typeHere}
-              placeholderTextColor={Colors.TEXT_GRAY_DARK}
-              value={description}
-              onChangeText={(text) => setDescription(text)}
-              multiline
-            />
-          </View>
+        <View style={styles.reminderDate}>
+          <Text style={styles.on}>{String.time}</Text>
+          <Text style={styles.date}>{moment(datetime).format('hh : mm A')}</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.reminderChooseButtons}>
+            {timeButton.map((item, index) => (
+              <TouchableOpacity key={index} style={[styles.chooseButton,
+              {
+                backgroundColor: item === timeselectedButton ? Colors.PRIMARY : Colors.WHITE,
+              }
+              ]} activeOpacity={0.7}
+                onPress={() => handledChooseTime(item)}
+              >
+                <Text style={[styles.chooseText
+                  , { color: item === timeselectedButton ? Colors.WHITE : Colors.TEXT_LITE }
+                ]}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
+      </View>
 
-      </ScrollView>
+      <View style={styles.notePad}>
+        <View style={styles.noteContent}>
+          <Text style={styles.noteTitle}>{String.addNote}</Text>
+          <TextInput
+            style={styles.noteDescription}
+            placeholder={String.typeHere}
+            placeholderTextColor={Colors.TEXT_GRAY_DARK}
+            value={description}
+            onChangeText={(text) => setDescription(text)}
+            multiline
+          />
+        </View>
+      </View>
 
       <View style={styles.colorPalette}>
         <View style={styles.colorPick}>
@@ -301,7 +295,7 @@ const AddReminder = ({ navigation, route }: AddReminderProps) => {
         </View>
       </View>
       <NoteBottomTab />
-    </>
+    </KeyboardAvoidingView>
   );
 };
 

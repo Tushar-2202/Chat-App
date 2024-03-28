@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Colors, Fonts } from "../../../utils";
-import { height, width } from "../../../utils/Constant";
+import { Colors, Fonts, height, width } from "../../../utils";
 
 const styles = StyleSheet.create({
     container: {
@@ -22,12 +21,12 @@ const styles = StyleSheet.create({
     dateStatus: {
         fontSize: width * 0.035,
         color: Colors.NOTE_HEADER,
-        fontFamily:Fonts.regular
+        fontFamily: Fonts.regular
     },
     time: {
         fontSize: width * 0.095,
         color: Colors.TEXT_GRAY,
-        fontFamily:Fonts.regular
+        fontFamily: Fonts.regular
     },
     description: {
         fontSize: 13,

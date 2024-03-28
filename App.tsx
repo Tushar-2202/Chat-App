@@ -3,13 +3,12 @@ import { StatusBar } from 'react-native'
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import Navigate from './src/Routes/Navigate';
-import { Colors } from './src/utils';
+import { Colors, GOOGLE_WEB_API_KEY } from './src/utils';
 import { Provider } from 'react-redux'
 import { store, persistor } from './src/redux-toolkit/store';
 import { PersistGate } from 'redux-persist/integration/react'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Toast from 'react-native-toast-message';
-import { GOOGLE_WEB_API_KEY } from './src/utils/Constant';
 
 const App = () => {
 

@@ -6,12 +6,12 @@ import { Colors, String } from '../../../utils';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import database from '@react-native-firebase/database';
-import { getFullDate } from '../../../utils/Constant';
 import Toast from 'react-native-toast-message';
 import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 import CustomLoader from '../../../components/View/CustomLoader';
+import moment from 'moment';
 
 interface NoteType {
   userId: string;
@@ -64,7 +64,7 @@ const AddNotebook = ({ navigation, route }: AddNotebookProps) => {
           title: title.trim(),
           description: description.trim(),
           color: selectedColor,
-          date: getFullDate(new Date()),
+          date: moment().format('hh:mm A, Do MMMM'),
         };
         await database().ref('/notes').push(note);
         setTitle('');
@@ -96,7 +96,7 @@ const AddNotebook = ({ navigation, route }: AddNotebookProps) => {
           title: title.trim(),
           description: description.trim(),
           color: selectedColor,
-          date: getFullDate(new Date()),
+          date: moment().format('hh:mm A, Do MMMM'),
         };
         await database().ref(`/notes/${route.params?.notebookId}`).update(note);
         Toast.show({

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Switch, FlatList, TouchableOpacity, Pressable } from 'react-native';
 import database from '@react-native-firebase/database';
 import notifee from '@notifee/react-native';
-import { formatDate } from '../../../utils/Constant';
 import styles from './style';
 import CustomLoader from '../../../components/View/CustomLoader';
 import { Colors, String, triggerNotification } from '../../../utils';
@@ -14,6 +13,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthenticatedNavigatorType } from '../../../Routes/Authenticated';
 import { Routes } from '../../../Routes/Routes';
 import CustomModal, { ModalType } from '../../../components/View/CustomModal';
+import moment from 'moment';
 
 export interface ReminderTypes {
   id: string; // firebase id
@@ -137,11 +137,6 @@ const Reminder = ({ navigation }: ReminderProps) => {
     );
   };
 
-  const convertToAmPm = (date: Date) => {
-    const hours = date.getHours();
-    return hours >= 12 ? String.pm : String.am;
-  }
-
   const selecteMultipleReminders = () => {
     if (selectedReminderId.length === reminderData.length) {
       setSelectedReminderId([]);
@@ -180,15 +175,16 @@ const Reminder = ({ navigation }: ReminderProps) => {
       <View style={styles.reminderContent}>
         <Text style={styles.dateStatus}>
           {
-            item.dateselecteButton === String.choose ? formatDate(item.datetime) : item.dateselecteButton
+            item.dateselecteButton === String.choose ? moment(item.datetime).format('DD MMMM YYYY')
+            : item.dateselecteButton
           }
         </Text>
         <View style={styles.timeContainer}>
           <Text style={styles.time}>
-            {item.datetime.toTimeString().slice(0, 5)}
+            {moment(item.datetime).format('hh:mm')}
           </Text>
           <Text style={styles.amPm}>
-            {convertToAmPm(item.datetime)}
+            {moment(item.datetime).format('A')}
           </Text>
         </View>
 
